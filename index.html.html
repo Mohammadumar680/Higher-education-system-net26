@@ -1,0 +1,221 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1rem 0}
+.prog-bar-wrap{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px 16px;margin-bottom:14px;border:0.5px solid var(--color-border-tertiary)}
+.prog-row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.prog-label{font-size:13px;color:var(--color-text-secondary);flex:1}
+.prog-num{font-size:13px;font-weight:500;color:#3C3489}
+.prog-track{height:6px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:#7F77DD;border-radius:3px;transition:width 0.3s}
+.save-status{font-size:11px;color:var(--color-text-secondary);text-align:right;margin-top:6px}
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:8px;margin-bottom:14px}
+.t-btn{display:flex;align-items:center;gap:8px;padding:9px 11px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);cursor:pointer;transition:all 0.15s;text-align:left}
+.t-btn:hover{background:var(--color-background-secondary)}
+.t-btn.active{border-color:#7F77DD;background:#EEEDFE}
+.t-btn.done{border-color:#1D9E75;background:#E1F5EE}
+.t-btn.active.done{border-color:#1D9E75;background:#E1F5EE}
+.t-num{font-size:11px;font-weight:500;color:var(--color-text-secondary);min-width:16px}
+.t-btn.active .t-num{color:#534AB7}
+.t-btn.done .t-num{color:#0F6E56}
+.t-name{font-size:12px;font-weight:500;color:var(--color-text-primary);flex:1;line-height:1.3}
+.t-btn.done .t-name{color:#085041}
+.tick{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:transparent;transition:all 0.2s}
+.t-btn.done .tick{background:#1D9E75;border-color:#1D9E75;color:#fff}
+.detail{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.detail-head{padding:12px 16px;background:#EEEDFE;border-bottom:0.5px solid #AFA9EC;display:flex;align-items:center;gap:10px}
+.detail-title{font-size:15px;font-weight:500;color:#26215C;flex:1}
+.mark-all-btn{font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #7F77DD;background:transparent;color:#534AB7;cursor:pointer}
+.mark-all-btn:hover{background:#CECBF6}
+.sub-list{padding:10px 12px;display:flex;flex-direction:column;gap:5px}
+.sub-item{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;border-radius:var(--border-radius-md);background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:all 0.15s}
+.sub-item:hover{background:var(--color-background-secondary)}
+.sub-item.done{background:#E1F5EE;border-color:#5DCAA5}
+.sub-num{font-size:11px;font-weight:500;color:#7F77DD;min-width:26px;margin-top:1px}
+.sub-item.done .sub-num{color:#0F6E56}
+.sub-info{flex:1}
+.sub-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.sub-item.done .sub-name{color:#085041}
+.sub-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.4}
+.sub-tick{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;color:transparent;transition:all 0.2s;margin-top:1px}
+.sub-item.done .sub-tick{background:#1D9E75;border-color:#1D9E75;color:#fff}
+.badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.badge{font-size:10px;padding:1px 7px;border-radius:20px;font-weight:500}
+.bi{background:#EEEDFE;color:#3C3489}
+.be{background:#EAF3DE;color:#27500A}
+.bm{background:#FAEEDA;color:#633806}
+.bh{background:#FAECE7;color:#712B13}
+.placeholder{padding:2rem 1rem;text-align:center;color:var(--color-text-secondary);font-size:13px}
+.study-btn{margin:0 12px 12px;padding:9px;width:calc(100% - 24px);border-radius:var(--border-radius-md);font-size:12px;font-weight:500;background:#EEEDFE;color:#3C3489;border:0.5px solid #AFA9EC;cursor:pointer}
+.study-btn:hover{background:#CECBF6}
+</style>
+
+<div class="wrap">
+  <h2 style="position:absolute;left:-9999px">Unit 10 Higher Education System — UGC NET Paper 1 progress tracker</h2>
+
+  <div class="prog-bar-wrap">
+    <div class="prog-row">
+      <span class="prog-label">Overall progress — Unit 10: Higher Education System</span>
+      <span class="prog-num" id="prog-num">0 / 0</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="save-status" id="save-status">Progress load ho rahi hai...</div>
+  </div>
+
+  <div class="topic-grid" id="grid"></div>
+
+  <div class="detail" id="detail">
+    <div class="placeholder">Upar koi topic select karo — subtopics dikhenge aur tick kar sako ge</div>
+  </div>
+</div>
+
+<script>
+const topics=[
+  {name:"Ancient Higher Learning",subs:[
+    {name:"Vedic education system",desc:"Gurukul tradition; oral transmission; shishya-guru parampara",tags:["Important","Easy"]},
+    {name:"Takshashila University",desc:"World's earliest university; subjects taught; global scholars",tags:["Important","Medium"]},
+    {name:"Nalanda University",desc:"Buddhist learning centre; structure; decline; international reach",tags:["Important","Medium"]},
+    {name:"Vikramshila & Vallabhi",desc:"Buddhist universities; curriculum; patronage",tags:["Medium"]},
+    {name:"Other ancient institutions",desc:"Mithila, Kashi, Navadwipa; regional centres of learning",tags:["Medium"]},
+    {name:"Characteristics of ancient education",desc:"Free education; residential; holistic; values-based; Sanskrit medium",tags:["Important","Easy"]},
+  ]},
+  {name:"Post-Independence Evolution",subs:[
+    {name:"University Education Commission 1948",desc:"Radhakrishnan Commission; recommendations for higher ed reform",tags:["Important","Medium"]},
+    {name:"Education Commission 1964-66",desc:"Kothari Commission; 3% GDP; vocationalisation; recommendations",tags:["Important","Medium"]},
+    {name:"National Policy on Education 1986",desc:"NPE 1986; Programme of Action; restructuring; open universities",tags:["Important","Medium"]},
+    {name:"NPE 1992 revised",desc:"Modified Programme of Action; equity & access emphasis",tags:["Medium"]},
+    {name:"National Education Policy 2020",desc:"NEP 2020; multidisciplinary; 50% GER by 2035; credit system",tags:["Important","Hard"]},
+    {name:"UGC & regulatory bodies",desc:"UGC establishment 1956; AICTE; NCTE; MCI; BCI roles",tags:["Important","Medium"]},
+    {name:"IITs, IIMs & central universities",desc:"Institutes of national importance; Acts; autonomy; ranking",tags:["Medium"]},
+  ]},
+  {name:"Oriental, Conventional & Non-conventional Learning",subs:[
+    {name:"Oriental learning",desc:"Sanskrit, Arabic, Persian studies; madrasa education; pathshala",tags:["Important","Medium"]},
+    {name:"Conventional programmes",desc:"Traditional degree programmes; semester system; affiliation",tags:["Easy"]},
+    {name:"Non-conventional programmes",desc:"Vocational, skill-based, interdisciplinary, online courses",tags:["Important","Medium"]},
+    {name:"Distance education",desc:"IGNOU; ODL mode; correspondence; reach to remote areas",tags:["Important","Easy"]},
+    {name:"Open universities in India",desc:"IGNOU, BRAOU, YCMOU; open & flexible learning",tags:["Medium"]},
+    {name:"MOOCs & e-learning",desc:"SWAYAM; NPTEL; Coursera tie-ups; digital learning platforms",tags:["Important","Medium"]},
+  ]},
+  {name:"Professional, Technical & Skill Based Education",subs:[
+    {name:"Technical education",desc:"IITs, NITs, polytechnics; AICTE regulation; engineering education",tags:["Important","Easy"]},
+    {name:"Medical & health education",desc:"MBBS, BDS, nursing; NMC; AIIMS; medical colleges",tags:["Medium"]},
+    {name:"Legal education",desc:"LL.B, NLS; Bar Council of India; 5-year integrated law",tags:["Medium"]},
+    {name:"Management education",desc:"IIMs; MBA programmes; PGDM; AICTE approval",tags:["Easy"]},
+    {name:"Skill development initiatives",desc:"PMKVY; Skill India Mission; NSDC; sector skill councils",tags:["Important","Medium"]},
+    {name:"Vocational education",desc:"ITIs; polytechnics; NSQF framework; industry linkage",tags:["Important","Medium"]},
+    {name:"Professional councils & bodies",desc:"BCI, MCI/NMC, AICTE, NCTE — roles and jurisdiction",tags:["Medium"]},
+  ]},
+  {name:"Value Education & Environmental Education",subs:[
+    {name:"Concept of value education",desc:"Moral, spiritual, social values; need in modern education",tags:["Important","Easy"]},
+    {name:"Types of values",desc:"Terminal vs instrumental; personal, social, national values",tags:["Medium"]},
+    {name:"Value education in curriculum",desc:"Integration in school & higher ed; yoga, ethics courses",tags:["Medium"]},
+    {name:"Environmental education basics",desc:"Ecology, biodiversity, pollution, conservation",tags:["Important","Easy"]},
+    {name:"Constitutional & legal provisions",desc:"Art 48A, Art 51A(g); Environment Protection Act 1986",tags:["Important","Medium"]},
+    {name:"Environmental education in India",desc:"NCERT curriculum; M.C. Mehta case; mandatory in colleges",tags:["Important","Medium"]},
+    {name:"Sustainable development goals",desc:"SDG 4 (Quality Education); SDG 13 (Climate Action); linkage",tags:["Medium"]},
+  ]},
+  {name:"Policies, Governance & Administration",subs:[
+    {name:"Central vs state role",desc:"Concurrent list; Central & State universities; funding model",tags:["Important","Medium"]},
+    {name:"UGC functions & powers",desc:"Grant disbursement; standards; autonomy; deemed universities",tags:["Important","Medium"]},
+    {name:"NAAC & accreditation",desc:"Grading system; assessment criteria; IQAC; importance",tags:["Important","Medium"]},
+    {name:"NBA accreditation",desc:"Programme-level accreditation; AICTE-linked; outcomes-based",tags:["Medium"]},
+    {name:"NIRF ranking",desc:"Teaching, research, graduation outcomes, perception; annual ranking",tags:["Important","Easy"]},
+    {name:"Autonomy & accountability",desc:"Academic & financial autonomy; institutional accountability",tags:["Medium"]},
+    {name:"Higher Education Financing",desc:"HEFA; PPP model; foreign universities; internationalisation",tags:["Important","Hard"]},
+    {name:"NEP 2020 governance reforms",desc:"HEI as single body; light-but-tight regulation; HECI proposal",tags:["Important","Hard"]},
+  ]},
+];
+
+const STORAGE_KEY = "ugcnet_unit10_progress_v1";
+const bmap={Important:"bi",Easy:"be",Medium:"bm",Hard:"bh"};
+let checked = {};
+let activeIdx = -1;
+let totalSubs = 0;
+
+topics.forEach(t => totalSubs += t.subs.length);
+
+async function loadProgress(){
+  try{
+    const res = await window.storage.get(STORAGE_KEY);
+    if(res && res.value){ checked = JSON.parse(res.value); }
+  }catch(e){ checked={}; }
+  document.getElementById("save-status").textContent = "Progress load ho gayi — browser band karne par bhi saved rahegi";
+  render();
+  if(activeIdx >= 0) renderDetail(activeIdx);
+}
+
+async function saveProgress(){
+  document.getElementById("save-status").textContent = "Saving...";
+  try{
+    await window.storage.set(STORAGE_KEY, JSON.stringify(checked));
+    document.getElementById("save-status").textContent = "Saved — agle session mein bhi rahega";
+  }catch(e){
+    document.getElementById("save-status").textContent = "Save nahi ho saka — try again";
+  }
+}
+
+function getKey(ti,si){ return ti+"_"+si; }
+
+function countDone(){
+  let d=0;
+  topics.forEach((t,ti)=>t.subs.forEach((_,si)=>{ if(checked[getKey(ti,si)]) d++; }));
+  return d;
+}
+
+function topicDone(ti){
+  return topics[ti].subs.every((_,si)=>checked[getKey(ti,si)]);
+}
+
+function render(){
+  const done = countDone();
+  const pct = totalSubs ? Math.round(done/totalSubs*100) : 0;
+  document.getElementById("prog-num").textContent = done+" / "+totalSubs;
+  document.getElementById("prog-fill").style.width = pct+"%";
+
+  const grid = document.getElementById("grid");
+  grid.innerHTML="";
+  topics.forEach((t,i)=>{
+    const btn=document.createElement("div");
+    const isDone=topicDone(i);
+    btn.className="t-btn"+(i===activeIdx?" active":"")+(isDone?" done":"");
+    btn.innerHTML=`<span class="t-num">${i+1}.</span><span class="t-name">${t.name}</span><span class="tick">${isDone?"✓":""}</span>`;
+    btn.onclick=()=>{ activeIdx=i; render(); renderDetail(i); };
+    grid.appendChild(btn);
+  });
+}
+
+function renderDetail(ti){
+  const t=topics[ti];
+  const allDone=topicDone(ti);
+  let html=`<div class="detail-head"><div class="detail-title">${ti+1}. ${t.name}</div><button class="mark-all-btn" onclick="markAll(${ti},${!allDone})">${allDone?"Sab untick karo":"Sab tick karo"}</button></div><div class="sub-list">`;
+  t.subs.forEach((s,si)=>{
+    const k=getKey(ti,si);
+    const done=!!checked[k];
+    const badges=s.tags.map(tg=>`<span class="badge ${bmap[tg]||"bm"}">${tg}</span>`).join("");
+    html+=`<div class="sub-item${done?" done":""}" onclick="toggle(${ti},${si})">
+      <div class="sub-num">${ti+1}.${si+1}</div>
+      <div class="sub-info"><div class="sub-name">${s.name}</div><div class="sub-desc">${s.desc}</div><div class="badges">${badges}</div></div>
+      <div class="sub-tick">${done?"✓":""}</div>
+    </div>`;
+  });
+  html+=`</div><button class="study-btn" onclick="sendPrompt('${t.name} ka pura explanation do UGC NET Paper 1 ke liye with examples ↗')">Is topic ko detail mein padhao ↗</button>`;
+  document.getElementById("detail").innerHTML=html;
+}
+
+function toggle(ti,si){
+  const k=getKey(ti,si);
+  checked[k]=!checked[k];
+  saveProgress();
+  render();
+  renderDetail(ti);
+}
+
+function markAll(ti,val){
+  topics[ti].subs.forEach((_,si)=>{ checked[getKey(ti,si)]=val; });
+  saveProgress();
+  render();
+  renderDetail(ti);
+}
+
+loadProgress();
+</script>
